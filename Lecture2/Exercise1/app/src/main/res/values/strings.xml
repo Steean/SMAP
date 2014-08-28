@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Exercise1</string>
+    <string name="action_settings">Settings</string>
+    <string name="txt">Android Lifecycle</string>
+
+    <string-array name="starwars_chars">
+        <item>Luke Skywalker</item>
+        <item>Darth Vader</item>
+        <item>Yoda</item>
+    </string-array>
+
+</resources>
