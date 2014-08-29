@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Exercise2</string>
+    <string name="part_a">Exercise2A</string>
+    <string name="part_b">Exercise2B</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_part_b">part_b</string>
+
+</resources>
