@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HandIn2_11302</string>
+    <string name="seconds_to_wait">Seconds to wait</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
