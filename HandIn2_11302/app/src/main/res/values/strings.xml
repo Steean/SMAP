@@ -3,6 +3,7 @@
 
     <string name="app_name">HandIn2_11302</string>
     <string name="trigger_seconds">Alarm trigger seconds</string>
+    <string name="trigger_text">Text to pass</string>
     <string name="action_settings">Settings</string>
 
 </resources>

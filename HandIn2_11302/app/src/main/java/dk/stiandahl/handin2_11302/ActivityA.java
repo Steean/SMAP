@@ -16,14 +16,18 @@ public class ActivityA extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a);
+
+        Log.d("TAG","onCreate ActivityA");
     }
 
     public void btn_alarm_onClick(View view) {
-        Log.d("TAG","Knappen er trykket i bund - hans");
-        EditText inputText = (EditText) findViewById(R.id.et_seconds);
+        Log.d("TAG","btn_alarm_onClick ActivityA");
+        EditText inputSeconds = (EditText) findViewById(R.id.et_seconds);
+        EditText inputText = (EditText) findViewById(R.id.et_text);
 
         Intent i = new Intent(this, AlarmService.class);
-        i.putExtra("seconds", Integer.parseInt(inputText.getText().toString()));
+        i.putExtra("seconds", Integer.parseInt(inputSeconds.getText().toString()));
+        i.putExtra("text", inputText.getText());
 
         startService(i);
     }

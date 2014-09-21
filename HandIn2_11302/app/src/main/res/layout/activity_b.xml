@@ -8,7 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="HER ER TING"
-        android:id="@+id/textView"
+        android:id="@+id/tv_activityB"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>
