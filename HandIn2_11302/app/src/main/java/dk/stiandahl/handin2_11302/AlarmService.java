@@ -1,6 +1,7 @@
 package dk.stiandahl.handin2_11302;
 
 import android.app.AlarmManager;
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -13,12 +14,24 @@ import java.util.Calendar;
  * Created by stian on 15/09/14.
  */
 
-public class AlarmService extends Service {
+public class AlarmService extends IntentService {
 
     private PendingIntent pendingAlarmIntent;
 
+    public static final String ACTION_AlarmService = "dk.stiandahl.handin2_11302.AlarmService";
+
+    public AlarmService() {
+        super("AlarmService");
+    }
+
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public IBinder onBind(Intent intent) {
+        //TODO for communication return IBinder implementation
+        return null;
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
         Log.d("TAG", "onStartCommand AlarmService");
         int data = intent.getExtras().getInt("seconds");
 
@@ -31,12 +44,20 @@ public class AlarmService extends Service {
         AlarmManager manager = (AlarmManager)getSystemService(ALARM_SERVICE);
         manager.set(AlarmManager.RTC, (calendar.getTimeInMillis() + (data * 1000)), pendingAlarmIntent);
 
-        return Service.START_STICKY;
-    }
+        for(int i = data; i > 0; i--) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        //TODO for communication return IBinder implementation
-        return null;
+            Intent intentCountdown = new Intent();
+            //intentCountdown.setAction(ACTION_AlarmService);
+            //intentCountdown.addCategory(Intent.CATEGORY_DEFAULT);
+            intentCountdown.putExtra("countdown", Integer.toString(i));
+            sendBroadcast(intentCountdown);
+        }
+
     }
 }
