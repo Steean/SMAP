@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,16 @@ public class ActivityA extends Activity {
         public void onReceive(Context context, Intent intent) {
             Log.d("TAG", "onReceive ActivityA Broadcastreceiver");
             String toastString = intent.getStringExtra("countdown");
-            Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show();
+            final Toast toaster = Toast.makeText(context, toastString, Toast.LENGTH_SHORT);
+            toaster.show();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toaster.cancel();
+                }
+            }, 500);
         }
     };
 

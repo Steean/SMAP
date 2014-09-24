@@ -45,18 +45,18 @@ public class AlarmService extends IntentService {
         manager.set(AlarmManager.RTC, (calendar.getTimeInMillis() + (data * 1000)), pendingAlarmIntent);
 
         for(int i = data; i > 0; i--) {
+            Intent intentCountdown = new Intent();
+            intentCountdown.setAction(ACTION_AlarmService);
+            intentCountdown.addCategory(Intent.CATEGORY_DEFAULT);
+            intentCountdown.putExtra("countdown", Integer.toString(i));
+            sendBroadcast(intentCountdown);
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-            Intent intentCountdown = new Intent();
-            //intentCountdown.setAction(ACTION_AlarmService);
-            //intentCountdown.addCategory(Intent.CATEGORY_DEFAULT);
-            intentCountdown.putExtra("countdown", Integer.toString(i));
-            sendBroadcast(intentCountdown);
         }
 
     }
