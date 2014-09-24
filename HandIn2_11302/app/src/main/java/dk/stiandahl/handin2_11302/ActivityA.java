@@ -12,26 +12,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
 public class ActivityA extends Activity {
 
+    public static ProgressBar progg_bar;
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("TAG", "onReceive ActivityA Broadcastreceiver");
-            String toastString = intent.getStringExtra("countdown");
-            final Toast toaster = Toast.makeText(context, toastString, Toast.LENGTH_SHORT);
-            toaster.show();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    toaster.cancel();
-                }
-            }, 500);
+            progg_bar = (ProgressBar) findViewById(R.id.progg_bar);
+            progg_bar.incrementProgressBy(1);
         }
     };
 
@@ -55,6 +50,10 @@ public class ActivityA extends Activity {
         Intent i = new Intent(this, AlarmService.class);
         i.putExtra("seconds", Integer.parseInt(inputSeconds.getText().toString()));
         i.putExtra("text", inputText.getText());
+
+        progg_bar = (ProgressBar) findViewById(R.id.progg_bar);
+        progg_bar.setMax(Integer.parseInt(inputSeconds.getText().toString()));
+        progg_bar.setProgress(0);
 
         startService(i);
     }
