@@ -15,6 +15,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -47,12 +48,33 @@ public class ITogService extends Service {
         new DoBackgroundTask().execute(url);
     }
 
-    public class DoBackgroundTask extends AsyncTask<String, Void, ArrayList<String>> {
+    private String convertStreamToString(InputStream is) throws IOException {
+        if (is != null) {
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+
+            try {
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(is, "UTF-8"));
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            } finally {
+                is.close();
+            }
+            return sb.toString();
+        } else {
+            return "";
+        }
+    }
+
+    public class DoBackgroundTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected ArrayList<String> doInBackground(String... urls) {
+        protected String doInBackground(String... urls) {
 
             ArrayList<String> listItems = new ArrayList<String>();
+            String result = "";
 
             for(String url : urls){
                 try {
@@ -65,33 +87,18 @@ public class ITogService extends Service {
 
                     Log.d("status", "HTTP Status: " + Integer.toString(status));
 
-                    switch (status) {
-                        case 200:
-                        case 201:
-                            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                JSONArray ja = new JSONArray(line);
-
-                                for (int i = 0; i < ja.length(); i++) {
-                                    JSONObject jo = (JSONObject) ja.get(i);
-                                    listItems.add(jo.getString("name"));
-                                }
-                            }
-
-                            br.close();
-                    }
+                    result = convertStreamToString(request.getInputStream());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            return listItems;
 
+            return result;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Do anything with response..
             Log.d("test", "nu er vi er her");
