@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -68,10 +69,10 @@ public class ITogService extends Service {
         }
     }
 
-    public class DoBackgroundTask extends AsyncTask<String, Void, String> {
+    public class DoBackgroundTask extends AsyncTask<String, Void, ArrayList<String>> {
 
         @Override
-        protected String doInBackground(String... urls) {
+        protected ArrayList<String> doInBackground(String... urls) {
 
             ArrayList<String> listItems = new ArrayList<String>();
             String result = "";
@@ -83,25 +84,38 @@ public class ITogService extends Service {
 
                     request.connect();
 
-                    int status = request.getResponseCode();
+                    if(request.getResponseCode()==201 || request.getResponseCode()==200)
+                    {
+                        InputStream response = request.getInputStream();
+                        result = convertStreamToString(response);
 
-                    Log.d("status", "HTTP Status: " + Integer.toString(status));
+                        JSONArray outerArray = new JSONArray(result);
 
-                    result = convertStreamToString(request.getInputStream());
+                        for(int i = 0; i < outerArray.length(); i++) {
+                            JSONObject station = (JSONObject) outerArray.get(i);
+                            listItems.add(station.getString("name"));
+                        }
+                    }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            return result;
+            return listItems;
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<String> result) {
             super.onPostExecute(result);
-            //Do anything with response..
-            Log.d("test", "nu er vi er her");
+            Intent intent = new Intent("stations");
+            intent.putStringArrayListExtra("stationList",result);
+            sendLocationBroadcast(intent);
         }
+    }
+
+    private void sendLocationBroadcast(Intent intent){
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
