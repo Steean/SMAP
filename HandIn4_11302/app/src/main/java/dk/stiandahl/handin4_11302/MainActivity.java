@@ -38,10 +38,10 @@ public class MainActivity extends ListActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(listReceiver, new IntentFilter("stations"));
 
+        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stationList));
+
         filterText = (EditText) findViewById(R.id.filterInput);
         filterText.addTextChangedListener(filterTextWatcher);
-
-        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stationList));
     }
 
     @Override
@@ -53,6 +53,8 @@ public class MainActivity extends ListActivity {
     }
 
     public void onClick_searchBtn(View view) {
+        filterText.setText(null);
+
         if (mBound)
             togService.FetchStations("http://stog.itog.dk/itog/action/list/format/json");
     }
@@ -97,9 +99,9 @@ public class MainActivity extends ListActivity {
                                       int after) {
         }
 
-        public void onTextChanged(CharSequence s, int start, int before,
-                                  int count) {
-            adapter.getFilter().filter(s);
+        public void onTextChanged(CharSequence s, int start, int before,int count) {
+            if(adapter != null)
+                adapter.getFilter().filter(s);
         }
 
     };
