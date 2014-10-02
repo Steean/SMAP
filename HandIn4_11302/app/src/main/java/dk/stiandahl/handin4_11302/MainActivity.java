@@ -1,6 +1,5 @@
 package dk.stiandahl.handin4_11302;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -28,7 +27,7 @@ public class MainActivity extends ListActivity {
     private ListView lv;
     ArrayAdapter<String> adapter = null;
     private EditText filterText = null;
-    ArrayList<String> stationList;
+    ArrayList<String> stationList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +38,10 @@ public class MainActivity extends ListActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(listReceiver, new IntentFilter("stations"));
 
-        //setContentView(R.layout.activity_main);
-
         filterText = (EditText) findViewById(R.id.filterInput);
         filterText.addTextChangedListener(filterTextWatcher);
 
-        //setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stationList));
+        setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stationList));
     }
 
     @Override
@@ -82,12 +79,12 @@ public class MainActivity extends ListActivity {
         public void onReceive(Context context, Intent intent) {
             stationList = intent.getStringArrayListExtra("stationList");
 
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+            adapter = new ArrayAdapter<String>(
                     MainActivity.this,
                     android.R.layout.simple_list_item_1,
                     stationList );
 
-            lv.setAdapter(arrayAdapter);
+            lv.setAdapter(adapter);
         }
     };
 
