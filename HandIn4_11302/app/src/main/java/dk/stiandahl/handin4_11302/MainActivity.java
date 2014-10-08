@@ -50,6 +50,7 @@ public class MainActivity extends ListActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, ITogService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        //togService.FetchStations("http://stog.itog.dk/itog/action/list/format/json");
     }
 
     public void onClick_searchBtn(View view) {
@@ -67,6 +68,7 @@ public class MainActivity extends ListActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             ITogService.ITogBinder binder = (ITogService.ITogBinder) service;
             togService = binder.getService();
+            togService.FetchStations("http://stog.itog.dk/itog/action/list/format/json");
             mBound = true;
         }
 
